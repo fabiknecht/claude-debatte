@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# frage-agy — stellt der Antigravity CLI eine Frage zum Bestand im aktuellen Ordner.
+#
+# Liest nur. Die Sperre sind die Rechte-Regeln in
+# ~/.gemini/antigravity-cli/settings.json: dort stehen ausschliesslich
+# Lesebefehle, write_file(*) ist verboten. Im Headless-Modus lehnt agy alles
+# auto-ab, was dort nicht steht. Kein --dangerously-skip-permissions.
+#
+# Aufruf:  frage-agy "Frage"
+#          echo "Frage" | frage-agy
+# Stellschrauben: AGY_MODEL (Standard gemini-3.1-pro-high), AGY_EFFORT
+
+set -euo pipefail
+
+AGY="${AGY_BIN:-$HOME/.local/bin/agy}"
+command -v "$AGY" >/dev/null 2>&1 || AGY="$(command -v agy || true)"
+if [ -z "$AGY" ] || ! command -v "$AGY" >/dev/null 2>&1; then
+  echo "frage-agy: agy ist nicht installiert." >&2
+  echo "  curl -fsSL https://antigravity.google/cli/install.sh | bash" >&2
+  exit 127
+fi
+
+prompt="${1:-}"
+[ -n "$prompt" ] || prompt="$(cat)"
+if [ -z "${prompt//[[:space:]]/}" ]; then
+  echo "frage-agy: leere Frage." >&2
+  exit 64
+fi
+
+exec "$AGY" \
+  --print "$prompt" \
+  --output-format text \
+  --disable-slash-commands \
+  --model "${AGY_MODEL:-gemini-3.1-pro-high}" \
+  ${AGY_EFFORT:+--effort "$AGY_EFFORT"}

@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+# frage-codex — stellt der Codex CLI eine Frage zum Bestand im aktuellen Ordner.
+#
+# Liest nur. --sandbox read-only ist die Sperre: selbst wenn das Modell
+# beschliesst, eine Datei zu aendern, kommt es nicht durch.
+#
+# Aufruf:  frage-codex "Frage"
+#          echo "Frage" | frage-codex
+#          frage-codex -i bild1.png -i bild2.png "Frage zu den Bildern"
+# Stellschrauben: CODEX_MODEL (z. B. gpt-6-astra), CODEX_TIMEOUT (Sekunden,
+#                 Standard 300 — danach Abbruch mit Exit 124)
+#
+# -i wird wiederholt an `codex exec --image` durchgereicht (seit 06.09.2026,
+# fuer den Maschinenblick in WORKFLOW.md Station 8b).
+# `${bilder[@]+"${bilder[@]}"}` statt `"${bilder[@]}"`: macOS liefert Bash 3.2,
+# und dort ist ein leeres Array unter `set -u` ein Fehler.
+
+set -euo pipefail
+
+CODEX="${CODEX_BIN:-$HOME/.local/bin/codex}"
+command -v "$CODEX" >/dev/null 2>&1 || CODEX="$(command -v codex || true)"
+if [ -z "$CODEX" ] || ! command -v "$CODEX" >/dev/null 2>&1; then
+  echo "frage-codex: codex ist nicht installiert." >&2
+  echo "  curl -fsSL https://chatgpt.com/codex/install.sh | sh" >&2
+  exit 127
+fi
+
+if ! "$CODEX" login status >/dev/null 2>&1; then
+  echo "frage-codex: Codex ist nicht angemeldet. Im Terminal:  codex login" >&2
+  exit 78
+fi
+
+# Bilder einsammeln: -i <datei>, beliebig oft, vor der Frage.
+bilder=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -i|--image)
+      [ $# -ge 2 ] || { echo "frage-codex: -i braucht eine Datei." >&2; exit 64; }
+      [ -r "$2" ] || { echo "frage-codex: Bild nicht lesbar: $2" >&2; exit 66; }
+      bilder+=(-i "$2"); shift 2 ;;
+    --) shift; break ;;
+    -*) echo "frage-codex: unbekannte Option $1" >&2; exit 64 ;;
+    *) break ;;
+  esac
+done
+
+prompt="${1:-}"
+[ -n "$prompt" ] || prompt="$(cat)"
+if [ -z "${prompt//[[:space:]]/}" ]; then
+  echo "frage-codex: leere Frage." >&2
+  exit 64
+fi
+
+TIMEOUT="${CODEX_TIMEOUT:-300}"
+antwort="$(mktemp -t frage-codex-antwort)"
+protokoll="$(mktemp -t frage-codex-log)"
+trap 'rm -f "$antwort" "$protokoll"' EXIT
+
+"$CODEX" exec \
+      --sandbox read-only \
+      --skip-git-repo-check \
+      --color never \
+      --cd "$PWD" \
+      ${CODEX_MODEL:+--model "$CODEX_MODEL"} \
+      ${bilder[@]+"${bilder[@]}"} \
+      --output-last-message "$antwort" \
+      "$prompt" >"$protokoll" 2>&1 </dev/null &
+pid=$!; gewartet=0
+while kill -0 "$pid" 2>/dev/null; do
+  if [ "$gewartet" -ge "$TIMEOUT" ]; then
+    kill -9 "$pid" 2>/dev/null; wait "$pid" 2>/dev/null || true
+    echo "frage-codex: Codex nach ${TIMEOUT}s abgebrochen (CODEX_TIMEOUT)." >&2
+    exit 124
+  fi
+  sleep 2; gewartet=$((gewartet + 2))
+done
+if ! wait "$pid"; then
+  echo "frage-codex: Codex ist fehlgeschlagen. Letzte Zeilen:" >&2
+  tail -n 20 "$protokoll" >&2
+  exit 1
+fi
+
+if [ ! -s "$antwort" ]; then
+  echo "frage-codex: Codex hat nichts geantwortet. Letzte Zeilen:" >&2
+  tail -n 20 "$protokoll" >&2
+  exit 1
+fi
+
+cat "$antwort"
