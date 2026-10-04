@@ -36,10 +36,17 @@ case ":$PATH:" in
      echo '            export PATH="$HOME/.claude/bin:$PATH"' ;;
 esac
 
-if [[ ! -f "$HOME/.gemini/antigravity-cli/settings.json" ]]; then
-  echo "agy       Leseschranke fehlt. Ohne sie darf das Modell schreiben:"
-  echo "            cp $HIER/beispiele/antigravity-settings.json \\"
-  echo "               ~/.gemini/antigravity-cli/settings.json"
+# Die Leseschranke fuer agy: ohne diese Datei darf das Modell schreiben.
+# Fehlt sie, wird sie angelegt. Eine vorhandene Datei wird nie ueberschrieben.
+AGY="$HOME/.gemini/antigravity-cli/settings.json"
+if [[ ! -f "$AGY" ]]; then
+  echo "agy       Leseschranke neu: $AGY"
+  (( PROBE )) || { mkdir -p "$(dirname "$AGY")"; cp "$HIER/beispiele/antigravity-settings.json" "$AGY"; }
+elif grep -q '"deny"' "$AGY" && grep -q '"write_file(\*)"' "$AGY"; then
+  echo "agy       Leseschranke ok"
+else
+  echo "agy       Leseschranke UNVOLLSTAENDIG: $AGY sperrt write_file(*) nicht."
+  echo "            Mit beispiele/antigravity-settings.json vergleichen und von Hand ergaenzen."
 fi
 
 (( PROBE )) && echo "(Probe - nichts geaendert)"

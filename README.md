@@ -34,38 +34,52 @@ curl -fsSL https://antigravity.google/cli/install.sh | bash
 Landet unter `~/.local/bin/agy`. Ohne Google AI Pro oder Ultra gilt
 „Meaningful quota, refreshed weekly".
 
-**3 · Die Leseschranke für agy**
-
-`frage-agy` trägt **selbst keine Sperre**. Es verlässt sich darauf, dass agy
-im Headless-Betrieb alles ablehnt, was nicht ausdrücklich erlaubt ist —
-`beispiele/antigravity-settings.json` *ist* die Sperre:
+**3 · Commands, Wrapper und Leseschranke**
 
 ```
-cp beispiele/antigravity-settings.json ~/.gemini/antigravity-cli/settings.json
+git clone https://github.com/fabiknecht/claude-code-skills.git
+cd claude-code-skills && ./install.sh
 ```
 
-Hast du dort schon eine Datei, füge `"deny": ["write_file(*)"]` und die
-`allow`-Liste von Hand ein, statt sie zu überschreiben. Bei Codex macht das
-der Wrapper selbst, über `--sandbox read-only`.
-
-**4 · Commands und Wrapper verlinken**
-
-```
-./install.sh
-```
-
-Legt Symlinks von `~/.claude/…` hierher — `git pull` aktualisiert damit auch
-die installierte Fassung. `./install.sh --probe` zeigt nur, was passieren
-würde. Danach in einer neuen Shell:
-
-```
-command -v frage-codex >/dev/null && codex login status
-command -v frage-agy   >/dev/null && echo "agy da"
-```
+`install.sh` legt Symlinks von `~/.claude/…` hierher (`git pull` aktualisiert
+damit auch die installierte Fassung) und legt die **Leseschranke für agy** an,
+falls sie fehlt: `beispiele/antigravity-settings.json` nach
+`~/.gemini/antigravity-cli/settings.json`. `frage-agy` trägt selbst keine
+Sperre, ohne diese Datei darf agy schreiben. Eine vorhandene Datei wird nie
+überschrieben, nur geprüft. Bei Codex sperrt der Wrapper selbst, über
+`--sandbox read-only`. `./install.sh --probe` zeigt nur, was passieren würde.
 
 ⚠ **Fehlt `~/.claude/bin` auf dem Suchpfad, findet `/debatte` die beiden
-anderen Stimmen nicht — und läuft trotzdem, mit einer Stimme.** Das ist der
+anderen Stimmen nicht und läuft trotzdem, mit einer Stimme.** Das ist der
 häufigste stille Fehler. `install.sh` sagt dir, ob die Zeile fehlt.
+
+### Lieber per Prompt?
+
+Dieselbe Einrichtung, von Claude Code erledigt. In Claude Code einfügen:
+
+```
+Richte /debatte aus github.com/fabiknecht/claude-code-skills ein.
+1 Klone das Repo nach ~/Projekte/claude-code-skills.
+2 Führe dort ./install.sh --probe aus und zeig mir, was es tun würde.
+3 Nach meinem Okay: ./install.sh ausführen.
+4 Meldet es, dass die PATH-Zeile fehlt, trag sie in meine
+  Shell-Konfiguration ein.
+5 Sag mir in einfachen Worten, was du geändert hast.
+Ändere nichts außerhalb von ~/.claude, ~/.gemini/antigravity-cli,
+dem geklonten Ordner und meiner Shell-Konfiguration.
+```
+
+Danach Claude Code neu starten und prüfen lassen:
+
+```
+Prüfe, ob /debatte startklar ist. Ändere nichts.
+1 Ist Codex angemeldet? (codex login status)
+2 Ist agy installiert?
+3 Gibt es ~/.gemini/antigravity-cli/settings.json, und verbietet
+  sie write_file(*)?
+4 Findet die Shell frage-codex und frage-agy?
+Antworte je Punkt mit ja oder nein, bei nein mit der Lösung.
+```
 
 ## Was du wissen solltest, bevor du es benutzt
 

@@ -66,10 +66,10 @@ zuständigen Spezifikation, nach demselben Muster: Frage + Belegstelle.
 | # | Frage | Belegstelle |
 |---|---|---|
 | 1 | Nennt die **Prüffrage-Spalte** je Fläche die *gesprochene* Behauptung, die die Fläche belegt — oder nennt sie eine andere Fläche („wie oben", „Fortsetzung")? | `brand/DESIGN.md`, *Die Fläche belegt, sie wiederholt nicht* |
-| 2 | **Register und Zustand:** Zeile 1 ist B hell (Hook im Split, Panel zeigt ab Frame 0 etwas); jede B-Zeile hell; jede B-Zeile trägt eine Fläche; Registerwechsel nur an Kapitelgrenzen | `brand/DESIGN.md`, *Die drei Bildzustände*, *Der Hook liegt im Split*; `WORKFLOW.md` Station 4, *Register und Zustand werden zusammen festgelegt* |
+| 2 | **Register und Zustand:** Hook/Layout folgen der Bildidee; Split mit Kopf-Breakout bewusst geprüft, bei B heller K2-Grund und gefülltes Panel ab Fensterstart; neue Layouts innerhalb der CI zulässig | `brand/DESIGN.md`, *Die drei Bildzustände*, *Der Hook liegt im Split*; `WORKFLOW.md` Station 4, *Register und Zustand werden zusammen festgelegt* |
 | 3 | **Lückenlosigkeit:** endet jedes Bildfenster auf dem Start des nächsten; ist jede Lücke als A-Zustand in der Tabelle? | `brand/DESIGN.md`, *Zwischen zwei Flächen gibt es keine Lücke* |
-| 4 | **Bekanntes Objekt:** gibt es zu einer erfundenen Grafik ein Objekt, das der Zuschauer kennt (Terminal, Kommentarfeld, Ads-Manager-Tabelle), oder ein Flächen-Muster in `CATALOG.md`, das dasselbe schon sagt? | `brand/DESIGN.md`, *Bekannte Objekte statt erfundener Grafik*; `CATALOG.md`, *Flächen-Muster* |
-| 5 | **Beleg statt Erfindung:** zeigt eine Fläche eine Zahl oder ein Ergebnis, das nicht in `reelplan/skript-final.json` steht? Zeigt das Panel im Hook ab Frame 0 etwas? Wird der CTA vorgeführt, nicht behauptet? | `brand/DESIGN.md`, *Rhythmus*, *Der CTA wird vorgeführt, nicht behauptet* |
+| 4 | **Bildidee und Beispiele:** Macht das Bild den Satz interessant und verständlich? Werden Ads/Landingpage/Copy konkret gezeigt? Katalog ist Angebot; keine Rückkorrektur auf Defaults. Sind Beleg, fremde Referenz und markierte Demo unterscheidbar? | `brand/DESIGN.md`, *Bekannte Objekte statt erfundener Grafik*; `CATALOG.md`, *Flächen-Muster* |
+| 5 | **Beleg statt Erfindung:** zeigt eine Fläche eine Zahl oder ein Ergebnis, das nicht in `reelplan/skript-final.json` steht? Ist die Hook-Aussage ab Beginn verständlich, bei B das Panel ab Frame 0 gefüllt? Wird der CTA vorgeführt, nicht behauptet? | `brand/DESIGN.md`, *Rhythmus*, *Der CTA wird vorgeführt, nicht behauptet* |
 
 Pfade, die ins Storyboard-Briefing gehören: `STORYBOARD.md`,
 `reelplan/skript-final.json`, `reelplan/frame.timed.md`, `brand/DESIGN.md`,
