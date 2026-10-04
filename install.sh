@@ -5,7 +5,7 @@
 set -u
 HIER="$(cd "$(dirname "$0")" && pwd)"
 ZIEL="$HOME/.claude"
-SICHERUNG="$ZIEL/_vor-claude-code-skills-$(date +%Y-%m-%d)"
+SICHERUNG="$ZIEL/_vor-claude-debatte-$(date +%Y-%m-%d)"
 PROBE=0; [[ "${1:-}" == "--probe" ]] && PROBE=1
 POSTEN="commands/debatte.md commands/kritik.md bin/frage-codex bin/frage-agy"
 

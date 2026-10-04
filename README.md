@@ -1,4 +1,4 @@
-# claude-code-skills
+# claude-debatte
 
 Zwei Commands für Claude Code, die eine **fremde Stimme** dazuholen: die Codex
 CLI von OpenAI und die Antigravity CLI von Google. Beide dürfen nur lesen.
@@ -37,8 +37,8 @@ Landet unter `~/.local/bin/agy`. Ohne Google AI Pro oder Ultra gilt
 **3 · Commands, Wrapper und Leseschranke**
 
 ```
-git clone https://github.com/fabiknecht/claude-code-skills.git
-cd claude-code-skills && ./install.sh
+git clone https://github.com/fabiknecht/claude-debatte.git
+cd claude-debatte && ./install.sh
 ```
 
 `install.sh` legt Symlinks von `~/.claude/…` hierher (`git pull` aktualisiert
@@ -59,8 +59,8 @@ Dieselbe Einrichtung, von Claude Code erledigt. In Claude Code einfügen:
 
 ```
 Richte /debatte aus
-github.com/fabiknecht/claude-code-skills ein.
-1 Klone das Repo nach ~/Projekte/claude-code-skills.
+github.com/fabiknecht/claude-debatte ein.
+1 Klone das Repo nach ~/Projekte/claude-debatte.
 2 Führe dort ./install.sh --probe aus und zeig mir,
   was es tun würde.
 3 Nach meinem Okay: ./install.sh ausführen.
