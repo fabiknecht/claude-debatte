@@ -58,15 +58,18 @@ häufigste stille Fehler. `install.sh` sagt dir, ob die Zeile fehlt.
 Dieselbe Einrichtung, von Claude Code erledigt. In Claude Code einfügen:
 
 ```
-Richte /debatte aus github.com/fabiknecht/claude-code-skills ein.
+Richte /debatte aus
+github.com/fabiknecht/claude-code-skills ein.
 1 Klone das Repo nach ~/Projekte/claude-code-skills.
-2 Führe dort ./install.sh --probe aus und zeig mir, was es tun würde.
+2 Führe dort ./install.sh --probe aus und zeig mir,
+  was es tun würde.
 3 Nach meinem Okay: ./install.sh ausführen.
 4 Meldet es, dass die PATH-Zeile fehlt, trag sie in meine
   Shell-Konfiguration ein.
 5 Sag mir in einfachen Worten, was du geändert hast.
-Ändere nichts außerhalb von ~/.claude, ~/.gemini/antigravity-cli,
-dem geklonten Ordner und meiner Shell-Konfiguration.
+Ändere nichts außerhalb von ~/.claude,
+~/.gemini/antigravity-cli, dem geklonten Ordner und
+meiner Shell-Konfiguration.
 ```
 
 Danach Claude Code neu starten und prüfen lassen:
@@ -75,8 +78,8 @@ Danach Claude Code neu starten und prüfen lassen:
 Prüfe, ob /debatte startklar ist. Ändere nichts.
 1 Ist Codex angemeldet? (codex login status)
 2 Ist agy installiert?
-3 Gibt es ~/.gemini/antigravity-cli/settings.json, und verbietet
-  sie write_file(*)?
+3 Gibt es ~/.gemini/antigravity-cli/settings.json,
+  und verbietet sie write_file(*)?
 4 Findet die Shell frage-codex und frage-agy?
 Antworte je Punkt mit ja oder nein, bei nein mit der Lösung.
 ```
